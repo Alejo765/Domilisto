@@ -1,8 +1,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.domilisto.web.modelo.Producto" %>
+<%@ page import="com.domilisto.web.modelo.Usuario" %>
 <%
-    List<Producto> listaProductos = (List<Producto>) request.getAttribute("productos");
+    // Recupera los datos del usuario desde la sesión
+    String usuario = (String) session.getAttribute("usuario");
+    String rol = (String) session.getAttribute("rol");
+
+    // Si no hay sesión o el rol no es 'administrador', redirige a login
+    if (usuario == null || !rol.equals("administrador")) {
+        response.sendRedirect("login.jsp");
+        return;
+    }
 %>
 <!DOCTYPE html>
 <html lang="es">
@@ -13,70 +22,86 @@
 </head>
 <body class="bg-light">
 
-<div class="container mt-5">
+<div class="container mt-4">
+    <!-- Información de Usuario y enlace a Perfil -->
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3>Lista de Productos</h3>
-        <a href="nuevoProducto.jsp" class="btn btn-primary">Agregar Producto</a>
+        <div>
+            <h5>👤 Usuario: <strong><%= usuario != null ? usuario : "Invitado" %></strong></h5>
+            <p class="text-muted mb-0">Rol: <%= rol != null ? rol : "Sin rol" %></p>
+        </div>
+        <div>
+            <a href="profile.jsp" class="btn btn-info">Editar Perfil</a>
+            <form action="<%=request.getContextPath()%>/LogoutServlet" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
+            </form>
+        </div>
     </div>
 
-    <div class="table-responsive shadow rounded">
-        <table class="table table-striped table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Precio</th>
-                    <th>Categoría</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-            <%
-                if (listaProductos != null && !listaProductos.isEmpty()) {
-                    for (Producto p : listaProductos) {
-            %>
-                <tr>
-                    <td><%= p.getId() %></td>
-                    <td><%= p.getNombre() %></td>
-                    <td><%= p.getDescripcion() %></td>
-                    <td>$<%= p.getPrecio() %></td>
-                    <td><%= p.getCategoria() %></td>
-                    <td>
-                        <form action="<%=request.getContextPath()%>/ProductoServlet" method="get" style="display:inline;">
-                            <input type="hidden" name="accion" value="editar" />
-                            <input type="hidden" name="id" value="<%= p.getId() %>" />
-                            <input type="hidden" name="nombre" value="<%= p.getNombre() %>" />
-                            <input type="hidden" name="descripcion" value="<%= p.getDescripcion() %>" />
-                            <input type="hidden" name="precio" value="<%= p.getPrecio() %>" />
-                            <input type="hidden" name="categoria" value="<%= p.getCategoria() %>" />
-                            <button type="submit" class="btn btn-sm btn-warning">Editar</button>
-                        </form>
-                        <form action="<%=request.getContextPath()%>/ProductoServlet" method="post" style="display:inline;">
-                            <input type="hidden" name="accion" value="eliminar" />
-                            <input type="hidden" name="id" value="<%= p.getId() %>" />
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar este producto?')">Eliminar</button>
-                        </form>
-                    </td>
-                </tr>
-            <%
-                    }
-                } else {
-            %>
-                <tr>
-                    <td colspan="6" class="text-center">No hay productos registrados.</td>
-                </tr>
-            <%
-                }
-            %>
-            </tbody>
-        </table>
+    <!-- Panel de navegación -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="admin/dashboard.jsp" class="list-group-item list-group-item-action active">Dashboard</a>
+                <a href="admin/listaUsuarios.jsp" class="list-group-item list-group-item-action">Usuarios</a>
+                <a href="admin/listaProductos.jsp" class="list-group-item list-group-item-action">Productos</a>
+                <a href="admin/reportes.jsp" class="list-group-item list-group-item-action">Reportes</a>
+            </div>
+        </div>
+
+        <!-- Contenido del Dashboard -->
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Bienvenido al Panel de Administración</h4>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Resumen del Sistema</h5>
+                    <p class="card-text">Aquí puedes gestionar todos los aspectos del sistema de Domilisto.</p>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title">Usuarios Registrados</h5>
+                                    <p class="card-text">Administra los usuarios del sistema.</p>
+                                    <a href="admin/listaUsuarios.jsp" class="btn btn-info">Ver Usuarios</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title">Productos</h5>
+                                    <p class="card-text">Administra los productos disponibles para los clientes.</p>
+                                    <a href="admin/listaProductos.jsp" class="btn btn-info">Ver Productos</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title">Reportes</h5>
+                                    <p class="card-text">Accede a los reportes generados por el sistema.</p>
+                                    <a href="admin/reportes.jsp" class="btn btn-info">Ver Reportes</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+
+
+
 
 
 

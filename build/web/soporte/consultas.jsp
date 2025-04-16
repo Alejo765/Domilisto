@@ -18,8 +18,14 @@
             <button class="btn btn-outline-primary btn-sm">Responder</button>
         </div>
     </div>
+
+    <!-- Botón para cerrar sesión -->
+    <form action="<%=request.getContextPath()%>/LogoutServlet" method="post">
+        <button type="submit" class="btn btn-danger mt-4">Cerrar Sesión</button>
+    </form>
 </div>
 </body>
 </html>
+
 
 

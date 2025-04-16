@@ -1,7 +1,7 @@
 package com.domilisto.web.servlet;
 
-import com.domilisto.web.modelo.Producto;
 import com.domilisto.web.modelo.ConexionDB;
+import com.domilisto.web.modelo.Producto;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class ProductoServlet extends HttpServlet {
 
@@ -34,7 +35,8 @@ public class ProductoServlet extends HttpServlet {
                             rsEditar.getString("nombre"),
                             rsEditar.getString("descripcion"),
                             rsEditar.getDouble("precio"),
-                            rsEditar.getString("categoria")
+                            rsEditar.getString("categoria"),
+                            rsEditar.getString("imagen_url")
                         );
                         request.setAttribute("producto", producto);
                         request.getRequestDispatcher("/admin/editarProducto.jsp").forward(request, response);
@@ -59,7 +61,8 @@ public class ProductoServlet extends HttpServlet {
                             rs.getString("nombre"),
                             rs.getString("descripcion"),
                             rs.getDouble("precio"),
-                            rs.getString("categoria")
+                            rs.getString("categoria"),
+                            rs.getString("imagen_url")
                         ));
                     }
                     request.setAttribute("productos", productos);
@@ -77,25 +80,33 @@ public class ProductoServlet extends HttpServlet {
             String id = request.getParameter("id");
             String nombre = request.getParameter("nombre");
             String descripcion = request.getParameter("descripcion");
-            double precio = Double.parseDouble(request.getParameter("precio"));
+            double precio = 0.0;
+            try {
+                precio = Double.parseDouble(request.getParameter("precio"));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
             String categoria = request.getParameter("categoria");
+            String imagenUrl = request.getParameter("imagen_url");
 
             if (id == null || id.isEmpty()) {
                 PreparedStatement ps = conn.prepareStatement(
-                    "INSERT INTO productos(nombre, descripcion, precio, categoria) VALUES (?, ?, ?, ?)");
+                    "INSERT INTO productos(nombre, descripcion, precio, categoria, imagen_url) VALUES (?, ?, ?, ?, ?)");
                 ps.setString(1, nombre);
                 ps.setString(2, descripcion);
                 ps.setDouble(3, precio);
                 ps.setString(4, categoria);
+                ps.setString(5, imagenUrl);
                 ps.executeUpdate();
             } else {
                 PreparedStatement ps = conn.prepareStatement(
-                    "UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, categoria = ? WHERE id = ?");
+                    "UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, categoria = ?, imagen_url = ? WHERE id = ?");
                 ps.setString(1, nombre);
                 ps.setString(2, descripcion);
                 ps.setDouble(3, precio);
                 ps.setString(4, categoria);
-                ps.setInt(5, Integer.parseInt(id));
+                ps.setString(5, imagenUrl);
+                ps.setInt(6, Integer.parseInt(id));
                 ps.executeUpdate();
             }
 
@@ -106,4 +117,5 @@ public class ProductoServlet extends HttpServlet {
         }
     }
 }
+
 

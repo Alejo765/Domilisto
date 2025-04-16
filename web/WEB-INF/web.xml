@@ -16,6 +16,18 @@
         <servlet-name>LogoutServlet</servlet-name>
         <servlet-class>com.domilisto.web.servlet.LogoutServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ProfileServlet</servlet-name>
+        <servlet-class>com.domilisto.web.servlet.ProfileServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateProfileServlet</servlet-name>
+        <servlet-class>com.domilisto.web.servlet.UpdateProfileServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MenuClienteServlet</servlet-name>
+        <servlet-class>com.domilisto.web.servlet.MenuClienteServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -31,6 +43,18 @@
     <servlet-mapping>
         <servlet-name>LogoutServlet</servlet-name>
         <url-pattern>/LogoutServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProfileServlet</servlet-name>
+        <url-pattern>/ProfileServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateProfileServlet</servlet-name>
+        <url-pattern>/UpdateProfileServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MenuClienteServlet</servlet-name>
+        <url-pattern>/MenuClienteServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

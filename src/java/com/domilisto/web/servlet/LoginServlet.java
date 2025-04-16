@@ -1,64 +1,61 @@
 package com.domilisto.web.servlet;
 
+import com.domilisto.web.modelo.Usuario;
 import com.domilisto.web.modelo.ConexionDB;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.*;
-import javax.servlet.ServletException;
-import javax.servlet.http.*;
 
 public class LoginServlet extends HttpServlet {
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String correo = request.getParameter("correo");
         String clave = request.getParameter("clave");
 
-        try (Connection conn = ConexionDB.getConnection()) {
-            if (conn != null) {
-                String sql = "SELECT * FROM usuarios WHERE correo = ? AND clave = ?";
-                try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                    ps.setString(1, correo);
-                    ps.setString(2, clave);
-                    try (ResultSet rs = ps.executeQuery()) {
-                        if (rs.next()) {
-                            String rol = rs.getString("rol");
-                            HttpSession session = request.getSession();
-                            session.setAttribute("usuario", correo);
-                            session.setAttribute("rol", rol);
+        try (Connection con = ConexionDB.getConnection()) {
+            String sql = "SELECT * FROM usuarios WHERE correo = ? AND clave = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, correo);
+            ps.setString(2, clave);
+            ResultSet rs = ps.executeQuery();
 
-                            switch (rol) {
-                                case "admin":
-                                    response.sendRedirect("admin/dashboard.jsp");
-                                    break;
-                                case "empleado":
-                                    response.sendRedirect("empleado/pedidos.jsp");
-                                    break;
-                                case "cliente":
-                                    response.sendRedirect("cliente/menu.jsp");
-                                    break;
-                                case "soporte":
-                                    response.sendRedirect("soporte/consultas.jsp");
-                                    break;
-                                default:
-                                    response.sendRedirect("login.jsp?error=rol");
-                                    break;
-                            }
-                        } else {
-                            response.sendRedirect("login.jsp?error=datos");
-                        }
-                    }
+            if (rs.next()) {
+                HttpSession session = request.getSession();
+                String rol = rs.getString("rol");
+                session.setAttribute("usuario", rs.getString("nombre"));
+                session.setAttribute("rol", rol);
+
+                // Redirige según el rol
+                switch (rol) {
+                    case "cliente":
+                        response.sendRedirect("cliente/menu.jsp");
+                        break;
+                    case "empleado":
+                        response.sendRedirect("empleado/pedidos.jsp");
+                        break;
+                    case "soporte":
+                        response.sendRedirect("soporte/consultas.jsp");
+                        break;
+                    case "admin":
+                        response.sendRedirect("admin/dashboard.jsp");
+                        break;
+                    default:
+                        response.sendRedirect("login.jsp?error=rol_desconocido");
                 }
             } else {
-                response.sendRedirect("login.jsp?error=bd");
+                // Datos incorrectos
+                response.sendRedirect("login.jsp?error=datos_invalidos");
             }
-        } catch (Exception e) {
+
+        } catch (SQLException e) {
             e.printStackTrace();
-            response.sendRedirect("login.jsp?error=servidor");
+            response.sendRedirect("login.jsp?error=bd");
         }
     }
 }
+
 
 
 

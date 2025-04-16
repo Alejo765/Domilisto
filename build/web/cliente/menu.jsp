@@ -11,6 +11,7 @@
     <h2 class="mb-4 text-primary">¡Bienvenido al Menú de Domilisto!</h2>
     <p class="mb-3">Selecciona tus productos favoritos y haz tu pedido rápido.</p>
     
+    <!-- Productos disponibles -->
     <div class="row">
         <div class="col-md-4">
             <div class="card">
@@ -22,9 +23,19 @@
                 </div>
             </div>
         </div>
-        <!-- Puedes duplicar el bloque anterior para más productos -->
+        <!-- Aquí puedes agregar más productos si lo deseas -->
+    </div>
+
+    <!-- Botón para cerrar sesión -->
+    <div class="mt-4">
+        <form action="<%= request.getContextPath() %>/LogoutServlet" method="post">
+            <button type="submit" class="btn btn-danger w-100">Cerrar sesión</button>
+        </form>
     </div>
 </div>
+
+<!-- Bootstrap JS (se puede eliminar si no se usa para interacciones adicionales) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 
