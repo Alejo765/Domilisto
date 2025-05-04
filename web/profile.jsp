@@ -1,5 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -17,34 +18,34 @@
             <form action="UpdateProfileServlet" method="post">
                 <div class="mb-3">
                     <label for="nombre" class="form-label">Nombre completo</label>
-                    <input type="text" class="form-control" name="nombre" id="nombre" 
-                           value="${user.nombre != null ? user.nombre : ''}" required>
+                    <input type="text" class="form-control" name="nombre" id="nombre"
+                           value="${not empty user.nombre ? user.nombre : ''}" required>
                 </div>
                 <div class="mb-3">
                     <label for="correo" class="form-label">Correo electrónico</label>
-                    <input type="email" class="form-control" name="correo" id="correo" 
-                           value="${user.correo != null ? user.correo : ''}" required>
+                    <input type="email" class="form-control" name="correo" id="correo"
+                           value="${not empty user.correo ? user.correo : ''}" required>
                 </div>
                 <div class="mb-3">
                     <label for="edad" class="form-label">Edad</label>
-                    <input type="number" class="form-control" name="edad" id="edad" 
-                           value="${user.edad != null ? user.edad : ''}" required>
+                    <input type="number" class="form-control" name="edad" id="edad"
+                           value="${not empty user.edad ? user.edad : ''}" required>
                 </div>
                 <div class="mb-3">
                     <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
-                    <input type="date" class="form-control" name="fechaNacimiento" id="fechaNacimiento" 
-                           value="${not empty user.fechaNacimiento ? fn:substring(user.fechaNacimiento, 0, 10) : ''}" 
+                    <input type="date" class="form-control" name="fechaNacimiento" id="fechaNacimiento"
+                           value="${not empty user.fechaNacimiento ? fn:substring(user.fechaNacimiento, 0, 10) : ''}"
                            required>
                 </div>
                 <div class="mb-3">
-                    <label for="numero" class="form-label">Número de Teléfono</label>
-                    <input type="text" class="form-control" name="numero" id="numero" 
-                           value="${user.numero != null ? user.numero : ''}" required>
+                    <label for="telefono" class="form-label">Número de Teléfono</label>
+                    <input type="text" class="form-control" name="telefono" id="telefono"
+                           value="${not empty user.telefono ? user.telefono : ''}" required>
                 </div>
-                <div class="mb-3" id="direccionField">
+                <div class="mb-3">
                     <label for="direccion" class="form-label">Dirección</label>
-                    <input type="text" class="form-control" name="direccion" id="direccion" 
-                           value="${user.direccion != null ? user.direccion : ''}">
+                    <input type="text" class="form-control" name="direccion" id="direccion"
+                           value="${not empty user.direccion ? user.direccion : ''}">
                 </div>
 
                 <button type="submit" class="btn btn-success w-100">Actualizar Información</button>
