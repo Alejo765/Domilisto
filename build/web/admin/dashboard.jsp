@@ -7,9 +7,9 @@
     String usuario = (String) session.getAttribute("usuario");
     String rol = (String) session.getAttribute("rol");
 
-    // Si no hay sesión o el rol no es 'administrador', redirige a login
-    if (usuario == null || !rol.equals("administrador")) {
-        response.sendRedirect("login.jsp");
+    // Si no hay sesión o el rol no es 'admin', redirige a login
+    if (usuario == null || rol == null || !rol.equals("admin")) {
+        response.sendRedirect("../login.jsp");
         return;
     }
 %>
@@ -30,7 +30,7 @@
             <p class="text-muted mb-0">Rol: <%= rol != null ? rol : "Sin rol" %></p>
         </div>
         <div>
-            <a href="profile.jsp" class="btn btn-info">Editar Perfil</a>
+            <a href="../profile.jsp" class="btn btn-info">Editar Perfil</a>
             <form action="<%=request.getContextPath()%>/LogoutServlet" method="post" style="display:inline;">
                 <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
             </form>
@@ -41,10 +41,10 @@
     <div class="row mb-4">
         <div class="col-md-3">
             <div class="list-group">
-                <a href="admin/dashboard.jsp" class="list-group-item list-group-item-action active">Dashboard</a>
-                <a href="admin/listaUsuarios.jsp" class="list-group-item list-group-item-action">Usuarios</a>
-                <a href="admin/listaProductos.jsp" class="list-group-item list-group-item-action">Productos</a>
-                <a href="admin/reportes.jsp" class="list-group-item list-group-item-action">Reportes</a>
+                <a href="dashboard.jsp" class="list-group-item list-group-item-action active">Dashboard</a>
+                <a href="listaUsuarios.jsp" class="list-group-item list-group-item-action">Usuarios</a>
+                <a href="listaProductos.jsp" class="list-group-item list-group-item-action">Productos</a>
+                <a href="reportes.jsp" class="list-group-item list-group-item-action">Reportes</a>
             </div>
         </div>
 
@@ -64,7 +64,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">Usuarios Registrados</h5>
                                     <p class="card-text">Administra los usuarios del sistema.</p>
-                                    <a href="admin/listaUsuarios.jsp" class="btn btn-info">Ver Usuarios</a>
+                                    <a href="listaUsuarios.jsp" class="btn btn-info">Ver Usuarios</a>
                                 </div>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">Productos</h5>
                                     <p class="card-text">Administra los productos disponibles para los clientes.</p>
-                                    <a href="admin/listaProductos.jsp" class="btn btn-info">Ver Productos</a>
+                                    <a href="listaProductos.jsp" class="btn btn-info">Ver Productos</a>
                                 </div>
                             </div>
                         </div>
@@ -84,7 +84,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">Reportes</h5>
                                     <p class="card-text">Accede a los reportes generados por el sistema.</p>
-                                    <a href="admin/reportes.jsp" class="btn btn-info">Ver Reportes</a>
+                                    <a href="reportes.jsp" class="btn btn-info">Ver Reportes</a>
                                 </div>
                             </div>
                         </div>
@@ -98,6 +98,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
 
 
 

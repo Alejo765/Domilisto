@@ -4,6 +4,7 @@ import com.domilisto.web.modelo.ConexionDB;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,30 +22,40 @@ public class UpdateProfileServlet extends HttpServlet {
 
         if (correo != null) {
             String nombre = request.getParameter("nombre");
-            String edad = request.getParameter("edad");
-            String fechaNacimiento = request.getParameter("fechaNacimiento");
-            String numero = request.getParameter("numero");
-            String direccion = request.getParameter("direccion"); // Obtener la dirección
+            String edadStr = request.getParameter("edad");
+            String fechaNacimientoStr = request.getParameter("fechaNacimiento");
+            String telefono = request.getParameter("numero"); // input se llama "numero"
+            String direccion = request.getParameter("direccion");
 
-            try (Connection conn = ConexionDB.getConnection()) {
-                String sql = "UPDATE usuarios SET nombre = ?, edad = ?, fechaNacimiento = ?, numero = ?, direccion = ? WHERE correo = ?";
-                try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                    ps.setString(1, nombre);
-                    ps.setInt(2, Integer.parseInt(edad));
-                    ps.setString(3, fechaNacimiento);
-                    ps.setString(4, numero);
-                    ps.setString(5, direccion);  // Actualizar la dirección
-                    ps.setString(6, correo);
-                    ps.executeUpdate();
+            try {
+                int edad = Integer.parseInt(edadStr);
+                Date fechaNacimiento = Date.valueOf(fechaNacimientoStr);
 
-                    response.sendRedirect("profile.jsp");
+                try (Connection conn = ConexionDB.obtenerConexion()) {
+                    String sql = "UPDATE usuarios SET nombre = ?, edad = ?, fecha_nacimiento = ?, telefono = ?, direccion = ? WHERE correo = ?";
+                    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                        ps.setString(1, nombre);
+                        ps.setInt(2, edad);
+                        ps.setDate(3, fechaNacimiento);
+                        ps.setString(4, telefono);
+                        ps.setString(5, direccion);
+                        ps.setString(6, correo);
+
+                        ps.executeUpdate();
+
+                        // Redirige a perfil actualizado
+                        response.sendRedirect("perfil.jsp");
+                    }
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
                 response.sendRedirect("error.jsp");
             }
+
         } else {
             response.sendRedirect("login.jsp");
         }
     }
 }
+

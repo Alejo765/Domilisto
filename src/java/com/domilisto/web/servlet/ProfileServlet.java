@@ -5,7 +5,8 @@ import com.domilisto.web.modelo.Usuario;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;  // Asegúrate de importar ResultSet
+import java.sql.ResultSet; 
+import java.sql.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpSession;
 
 public class ProfileServlet extends HttpServlet {
 
-    @Override
+    
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
@@ -45,14 +46,15 @@ public class ProfileServlet extends HttpServlet {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                response.sendRedirect("error.jsp");
+                request.setAttribute("errorMessage", "Hubo un error al cargar el perfil. Intenta nuevamente más tarde.");
+                request.getRequestDispatcher("error.jsp").forward(request, response);
             }
         } else {
             response.sendRedirect("login.jsp");
         }
     }
 
-    @Override
+   
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -61,7 +63,7 @@ public class ProfileServlet extends HttpServlet {
             String correo = request.getParameter("correo");
             String nombre = request.getParameter("nombre");
             int edad = Integer.parseInt(request.getParameter("edad"));
-            String fechaNacimiento = request.getParameter("fechaNacimiento");
+            String fechaNacimientoStr = request.getParameter("fechaNacimiento");
             String numero = request.getParameter("numero");
             String direccion = request.getParameter("direccion");
 
@@ -70,7 +72,19 @@ public class ProfileServlet extends HttpServlet {
                 try (PreparedStatement ps = conn.prepareStatement(sql)) {
                     ps.setString(1, nombre);
                     ps.setInt(2, edad);
-                    ps.setString(3, fechaNacimiento);
+
+                    // Manejo robusto de fecha
+                    if (fechaNacimientoStr != null && !fechaNacimientoStr.isEmpty()) {
+                        try {
+                            java.sql.Date fechaNacimiento = java.sql.Date.valueOf(fechaNacimientoStr);
+                            ps.setDate(3, fechaNacimiento);
+                        } catch (IllegalArgumentException e) {
+                            ps.setNull(3, java.sql.Types.DATE);
+                        }
+                    } else {
+                        ps.setNull(3, java.sql.Types.DATE);
+                    }
+
                     ps.setString(4, numero);
                     ps.setString(5, direccion);
                     ps.setString(6, correo);
@@ -86,8 +100,10 @@ public class ProfileServlet extends HttpServlet {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                response.sendRedirect("error.jsp");
+                request.setAttribute("errorMessage", "Hubo un error al actualizar el perfil. Intenta nuevamente más tarde.");
+                request.getRequestDispatcher("error.jsp").forward(request, response);
             }
         }
     }
 }
+

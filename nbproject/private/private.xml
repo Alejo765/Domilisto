@@ -10,16 +10,14 @@
             <file>file:/C:/Users/mario/Desktop/Domilisto/src/java/com/domilisto/web/modelo/Producto.java</file>
             <file>file:/C:/Users/mario/Desktop/Domilisto/web/admin/editarProducto.jsp</file>
             <file>file:/C:/Users/mario/Desktop/Domilisto/web/admin/nuevoProducto.jsp</file>
-            <file>file:/C:/Users/mario/Desktop/Domilisto/web/WEB-INF/web.xml</file>
-            <file>file:/C:/Users/mario/Desktop/Domilisto/src/java/com/domilisto/web/servlet/UpdateProfileServlet.java</file>
             <file>file:/C:/Users/mario/Desktop/Domilisto/web/login.jsp</file>
             <file>file:/C:/Users/mario/Desktop/Domilisto/src/java/com/domilisto/web/servlet/LoginServlet.java</file>
             <file>file:/C:/Users/mario/Desktop/Domilisto/src/java/com/domilisto/web/servlet/LogoutServlet.java</file>
-            <file>file:/C:/Users/mario/Desktop/Domilisto/src/java/com/domilisto/web/servlet/ProfileServlet.java</file>
-            <file>file:/C:/Users/mario/Desktop/Domilisto/src/java/com/domilisto/web/servlet/RegistroServlet.java</file>
-            <file>file:/C:/Users/mario/Desktop/Domilisto/src/java/com/domilisto/web/servlet/ProductoServlet.java</file>
             <file>file:/C:/Users/mario/Desktop/Domilisto/src/java/com/domilisto/web/modelo/ConexionDB.java</file>
             <file>file:/C:/Users/mario/Desktop/Domilisto/web/admin/registro_producto.jsp</file>
+            <file>file:/C:/Users/mario/Desktop/Domilisto/web/registro.jsp</file>
+            <file>file:/C:/Users/mario/Desktop/Domilisto/web/soporte/consultas.jsp</file>
+            <file>file:/C:/Users/mario/Desktop/Domilisto/web/profile.jsp</file>
         </group>
     </open-files>
 </project-private>

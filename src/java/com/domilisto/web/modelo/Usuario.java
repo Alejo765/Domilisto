@@ -1,6 +1,6 @@
 package com.domilisto.web.modelo;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Usuario {
     private int id;
